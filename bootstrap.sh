@@ -8,7 +8,7 @@ INSTALL_DIR="$HOME/humanitz-server"
 
 echo ""
 echo "===================================================="
-echo " HumanitZ Dedicated Server Remote Bootstrap"
+echo " HumanitZ Dedicated Server Remote Bootstrap "
 echo "===================================================="
 echo ""
 
