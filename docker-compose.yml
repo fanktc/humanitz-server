@@ -1,0 +1,18 @@
+services:
+  humanitz:
+    build: .
+
+    container_name: humanitz
+
+    ports:
+      - "7777:7777/udp"
+      - "27015:27015/udp"
+
+    volumes:
+      - ./serverfiles:/serverfiles
+      - ./config:/config
+      - ./saves:/saves
+
+    restart: "no"
+
+    tty: true
