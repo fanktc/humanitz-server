@@ -2,49 +2,99 @@
 
 set -e
 
-REPO_URL="https://github.com/fanktc/humanitz-server.git"
-
-BRANCH="release/v1.0"
-
-INSTALL_DIR="$HOME/humanitz-server"
+PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo ""
 echo "===================================================="
-echo " HumanitZ Dedicated Server Remote Bootstrap"
+echo " HumanitZ Dedicated Server Bootstrap"
 echo "===================================================="
 echo ""
 
-if ! command -v git >/dev/null 2>&1
+echo "[1/7] Creating project directories..."
+
+mkdir -p "${PROJECT_ROOT}/config"
+mkdir -p "${PROJECT_ROOT}/saves"
+mkdir -p "${PROJECT_ROOT}/backups"
+
+echo "Done."
+echo ""
+
+echo "[2/7] Installing Docker..."
+
+"${PROJECT_ROOT}/scripts/install_docker.sh"
+
+echo ""
+echo "[3/7] Installing Rclone..."
+
+"${PROJECT_ROOT}/scripts/install_rclone.sh"
+
+echo ""
+echo "[4/7] Configuring automated backups..."
+
+"${PROJECT_ROOT}/scripts/setup_cron.sh"
+
+echo ""
+echo "[5/7] OneDrive Backup Setup"
+echo ""
+
+read -p "Would you like to configure OneDrive now? [y/N] " ANSWER
+
+if [[ "$ANSWER" =~ ^[Yy]$ ]]
 then
 
-    echo "Installing Git..."
-
-    sudo apt update
-
-    sudo apt install -y git
-
+    echo ""
+    echo "===================================================="
+    echo " OneDrive Headless Authentication"
+    echo "===================================================="
+    echo ""
+    echo "Run:"
+    echo ""
+    echo "    rclone config"
+    echo ""
+    echo "Choose:"
+    echo ""
+    echo "    n"
+    echo ""
+    echo "for auto config."
+    echo ""
+    echo "Open the generated URL on your local computer."
+    echo "Authenticate with Microsoft."
+    echo "Paste the generated token back into the server."
+    echo ""
 fi
 
-if [ ! -d "$INSTALL_DIR" ]
-then
+echo ""
+echo "[6/7] Deploying HumanitZ..."
 
-    echo "Cloning repository..."
+"${PROJECT_ROOT}/scripts/install_humanitz.sh"
 
-    git clone \
-        --branch "$BRANCH" \
-        "$REPO_URL" \
-        "$INSTALL_DIR"
+echo ""
+echo "[7/7] Running health check..."
 
-else
+"${PROJECT_ROOT}/scripts/healthcheck.sh"
 
-    echo "Repository already exists."
+echo ""
+echo "===================================================="
+echo " Deployment Completed Successfully"
+echo "===================================================="
+echo ""
 
-fi
+echo "Useful commands:"
+echo ""
 
-cd "$INSTALL_DIR"
+echo "Logs:"
+echo "docker logs -f humanitz"
 
-chmod +x bootstrap-local.sh
+echo ""
+echo "Backup:"
+echo "./scripts/backup.sh"
 
-chmod +x scripts/*.sh
+echo ""
+echo "Update:"
+echo "./scripts/update_server.sh"
 
-exec ./bootstrap-local.sh
+echo ""
+echo "Health Check:"
+echo "./scripts/healthcheck.sh"
+
+echo ""
