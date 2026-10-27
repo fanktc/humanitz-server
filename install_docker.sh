@@ -1,3 +1,9 @@
+if command -v docker >/dev/null 2>&1
+then
+    echo "Docker already installed."
+    exit 0
+fi
+
 #!/bin/bash
 
 set -e

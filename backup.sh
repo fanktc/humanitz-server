@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 set -e
@@ -23,9 +24,11 @@ then
 
     echo "Uploading backup to OneDrive..."
 
+    source ../.env
+
     rclone copy \
     "${BACKUP_FILE}" \
-    onedrive:/HumanitZBackups
+    "${ONEDRIVE_REMOTE}:/${ONEDRIVE_FOLDER}"
 
     echo "Upload completed."
 

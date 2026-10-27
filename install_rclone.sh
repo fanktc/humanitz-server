@@ -1,3 +1,9 @@
+if command -v rclone >/dev/null 2>&1
+then
+    echo "Rclone already installed."
+    exit 0
+fi
+
 #!/bin/bash
 
 set -e
