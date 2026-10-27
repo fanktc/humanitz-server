@@ -1,107 +1,84 @@
 # HumanitZ Dedicated Server
 
+Automated HumanitZ dedicated server deployment for Ubuntu using Docker, SteamCMD and OneDrive backups.
+
 ## Features
 
 - Docker-based deployment
-- SteamCMD automatic update
-- HumanitZ Linux Branch support
-- Persistent saves
+- Automatic HumanitZ installation
+- Linux server branch support
+- Persistent game saves
 - Persistent configuration
-- Automated backups
+- Local backups
 - OneDrive backup integration
 - Git versioned infrastructure
+- Easy migration to new servers
 
----
+## Installation
 
-## Ports
-
-| Port | Protocol | Purpose |
-|--------|----------|----------|
-| 7777 | UDP | Game traffic |
-| 27015 | UDP | Query traffic |
-
----
-
-## First Installation
+### Option 1 - Bootstrap Installation (Recommended)
 
 ```bash
-git clone <repository_url>
+curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/humanitz-server/main/bootstrap.sh | bash
+```
 
+### Option 2 - Git Clone (SSH)
+
+```bash
+git clone git@github.com:YOUR_USERNAME/humanitz-server.git
 cd humanitz-server
-
+chmod +x bootstrap.sh
 chmod +x scripts/*.sh
-
-./scripts/install_docker.sh
-`*`
-
-Logout and reconnect.
-
-```bash
-*/scripts/install_rclone.sh
+./bootstrap.sh
 ```
 
-Co*figure OneDrive.
-
-```bash*./scripts/install_humanitz.sh
-```
-*Enable daily*backups.
+### Option 3 - Git Clone (HTTPS)
 
 ```bash
-./scripts/setup_*ron.sh
+git clone https://github.com/YOUR_USERNAME/humanitz-server.git
+cd humanitz-server
+chmod +x bootstrap.sh
+chmod +x scripts/*.sh
+./bootstrap.sh
 ```
 
----
-
-## Daily Operatio*s
-
-*tart:
+### Option 4 - Download ZIP
 
 ```bash
-cd docker
+wget https://github.com/YOUR_USERNAME/humanitz-server/archive/refs/heads/main.zip
+unzip main.zip
+cd humanitz-server-main
+chmod +x bootstrap.sh
+chmod +x scripts/*.sh
+./bootstrap.sh
+```
 
-*ocker compose up -d
+## OneDrive Headless Authentication
+
+Run:
+
+```bash
+rclone config
+```
+
+Choose manual authentication and open the generated URL on another computer with a browser.
+
+## Daily Operations
+
+Start:
+
+```bash
+cd docker && docker compose up -d
 ```
 
 Stop:
 
-*``bash
-cd docker
-
-docker compose d*wn*```
+```bash
+cd docker && docker compose down
+```
 
 Logs:
 
 ```bash
-docker logs*-f humanitz
+docker logs -f humanitz
 ```
-
----
-
-*# Backup
-
-```bash
-./scripts/backup*sh
-```
-
----
-
-## Restore
-
-```bash*./scripts/restore.sh backup*tar.gz
-```
-
----
-
-## Update*
-```bash
-./scripts/update_server.s*
-*``
-
----
-
-## Health Check
-
-```bash
-*/scripts/healthcheck.sh
-```
-*
