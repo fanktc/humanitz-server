@@ -1,48 +1,107 @@
 # HumanitZ Dedicated Server
 
-Dockerized server for HumanitZ Linux.
+## Features
 
-## Components
+- Docker-based deployment
+- SteamCMD automatic update
+- HumanitZ Linux Branch support
+- Persistent saves
+- Persistent configuration
+- Automated backups
+- OneDrive backup integration
+- Git versioned infrastructure
 
-- Docker
-- Docker Compose
-- SteamCMD
-- Auto Update
-- Local Backup
-- OneDrive Backup
+---
 
 ## Ports
 
-7777/UDP
-27015/UDP
+| Port | Protocol | Purpose |
+|--------|----------|----------|
+| 7777 | UDP | Game traffic |
+| 27015 | UDP | Query traffic |
 
-## Start
+---
 
-docker compose up -d
+## First Installation
 
-## Stop
+```bash
+git clone <repository_url>
 
-docker compose down
+cd humanitz-server
 
-## Logs
+chmod +x scripts/*.sh
 
-docker logs -f humanitz
+./scripts/install_docker.sh
+`*`
 
-## Backup
+Logout and reconnect.
 
-./scripts/backup.sh
+```bash
+*/scripts/install_rclone.sh
+```
 
-## Update
+Co*figure OneDrive.
 
-./scripts/update.sh
+```bash*./scripts/install_humanitz.sh
+```
+*Enable daily*backups.
 
-## Structure
+```bash
+./scripts/setup_*ron.sh
+```
 
-config/
-saves/
-backups/
-serverfiles/
+---
+
+## Daily Operatio*s
+
+*tart:
+
+```bash
+cd docker
+
+*ocker compose up -d
+```
+
+Stop:
+
+*``bash
+cd docker
+
+docker compose d*wn*```
+
+Logs:
+
+```bash
+docker logs*-f humanitz
+```
+
+---
+
+*# Backup
+
+```bash
+./scripts/backup*sh
+```
+
+---
 
 ## Restore
 
-./scripts/restore.sh
+```bash*./scripts/restore.sh backup*tar.gz
+```
+
+---
+
+## Update*
+```bash
+./scripts/update_server.s*
+*``
+
+---
+
+## Health Check
+
+```bash
+*/scripts/healthcheck.sh
+```
+*
