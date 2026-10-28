@@ -14,7 +14,7 @@ echo "Creating backup..."
 tar -czf \
 "${BACKUP_FILE}" \
 "${PROJECT_DIR}/config" \
-"${PROJECT_DIR}/saves"
+"${PROJECT_DIR}/serverfiles/HumanitZServer/Saved"
 
 echo "Backup created:"
 echo "${BACKUP_FILE}"
