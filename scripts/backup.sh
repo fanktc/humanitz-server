@@ -24,7 +24,7 @@ then
 
     echo "Uploading backup to OneDrive..."
 
-    source ../.env
+    source ~/.env
 
     rclone copy \
     "${BACKUP_FILE}" \
