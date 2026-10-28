@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 if [ -z "$1" ]
 then
@@ -25,6 +25,8 @@ then
     exit 1
 fi
 
+TMP_DIR=$(mktemp -d)
+
 echo ""
 echo "===================================================="
 echo " HumanitZ Restore"
@@ -33,35 +35,78 @@ echo ""
 
 echo "Stopping container..."
 
-cd "${PROJECT_DIR}/docker"
+cd "${PROJECT_ROOT}/docker"
 
 docker compose down
 
 echo ""
-echo "Restoring files..."
+echo "Extracting backup..."
 
-cd "${PROJECT_DIR}"
+tar -xzf "${BACKUP_FILE}" -C "${TMP_DIR}"
 
-tar -xzf "${BACKUP_FILE}"
+CONFIG_FILE=$(find "${TMP_DIR}" -name GameServerSettings.ini | head -1)
+
+SAVE_DIR=$(find "${TMP_DIR}" -type d -path "*/HumanitZServer/Saved" | head -1)
+
+if [ -z "${CONFIG_FILE}" ]
+then
+    echo "GameServerSettings.ini not found in backup."
+    exit 1
+fi
+
+if [ -z "${SAVE_DIR}" ]
+then
+    echo "Saved directory not found in backup."
+    exit 1
+fi
+
+echo ""
+echo "Restoring configuration..."
+
+mkdir -p "${PROJECT_ROOT}/config"
+
+cp "${CONFIG_FILE}" \
+   "${PROJECT_ROOT}/config/GameServerSettings.ini"
+
+echo ""
+echo "Restoring save files..."
+
+mkdir -p \
+"${PROJECT_ROOT}/docker/serverfiles/HumanitZServer/Saved"
+
+rm -rf \
+"${PROJECT_ROOT}/docker/serverfiles/HumanitZServer/Saved"
+
+mkdir -p \
+"${PROJECT_ROOT}/docker/serverfiles/HumanitZServer/Saved"
+
+cp -a \
+"${SAVE_DIR}/." \
+"${PROJECT_ROOT}/docker/serverfiles/HumanitZServer/Saved/"
 
 echo ""
 echo "Starting server..."
 
-cd docker
+cd "${PROJECT_ROOT}/docker"
 
 docker compose up -d
 
 echo ""
-echo "Waiting for container startup..."
+echo "Waiting for startup..."
 
 sleep 10
 
 echo ""
 echo "Container status:"
-echo ""
-
 docker ps | grep humanitz || true
 
 echo ""
 echo "Restore completed successfully."
+
 echo ""
+echo "Cleaning temporary files..."
+
+rm -rf "${TMP_DIR}"
+
+echo ""
+echo "Done."
