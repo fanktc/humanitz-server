@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 set -e
@@ -13,8 +12,8 @@ echo "Creating backup..."
 
 tar -czf \
 "${BACKUP_FILE}" \
-"${PROJECT_DIR}/config" \
-"${PROJECT_DIR}/serverfiles/HumanitZServer/Saved"
+"${PROJECT_DIR}/docker/config" \
+"${PROJECT_DIR}/docker/serverfiles/HumanitZServer/Saved"
 
 echo "Backup created:"
 echo "${BACKUP_FILE}"
@@ -24,7 +23,7 @@ then
 
     echo "Uploading backup to OneDrive..."
 
-    source ~/.env
+    source "${PROJECT_DIR}"/.env
 
     rclone copy \
     "${BACKUP_FILE}" \
